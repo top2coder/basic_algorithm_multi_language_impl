@@ -1,0 +1,49 @@
+BST是一种二叉查找树，这里用C++/Java代码实现，go语言和python的待补充。
+
+基本的操作包括，增，删，查，平衡。
+
+先看增，如果树是空树，那么直接放到根节点；如果其值等于根节点，直接返回根节点，如果小于根节点，那么应该去左子树找合适的位置；否则去右子树找合适的位置。从步骤上看应该是递归操作。
+
+typedef struct Element Element;
+struct Element {
+    int val;
+    Element *lchild;
+    Element *rchild;
+    Element(int x) : val(x), left(NULL), right(NULL) {}
+};
+
+Element add(Element *root, int k) {
+    if(!root) {
+        Element newNode(0);
+        return newNode;
+    }
+    if (root->val==k) return root;
+    else if(root->val>k) return add(root->lchild, k);
+    else return add(root->rchild, k);
+}
+
+其次，考察删除操作。方法和增加是一样一样的。
+Element remove(Element *root, int k) {
+    if(!root) return root;
+    if(root->val==k) {
+        delete pt;
+        return NULL;
+    } else if(root->val>k) {
+        return remove(root->lchild, k);
+    } else return remove(root->rchild, k);
+}
+
+查找和删除操作类似，实际上，增加和删除都暗含了一次查找操作。
+bool find(Element *root, int k) {
+    if(!root) return false;
+    if(root->val==k) return true;
+    else if(root->val>k) return find(root->lchild, k);
+    else return find(root->rchild, k);
+}
+
+最后讨论树的平衡问题，保持树的平衡的根本原因是为了维持logN的查找性能。
+当二叉查找树一直单向增加元素时，将会出现最坏情况。
+当新元素插入元素，且元素的插入引起了左右子树高度差超过1时，需要做平衡；
+当删除元素，且元素的插入引起了左右子树高度差超过1时，需要做平衡。
+
+平衡的方法比较简单：把根节点深度大一侧的子树提升为新根节点，而原根节点作为新根节点的左子树或者右子树。
