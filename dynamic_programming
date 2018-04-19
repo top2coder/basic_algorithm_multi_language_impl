@@ -1,0 +1,28 @@
+
+动态规划是一个非常重要的算法，使用得当往往有四两拨千斤的功效。
+
+典型的走台阶问题：
+int countWaysDP(int n, vector<int> &map) {
+    if(n<0) return 0;
+    if(n==0) return 1;
+    if(map[n]>-1) return map[n];
+    map[n] = countWaysDP(n-1, map) + countWaysDP(n-2, map) + countWaysDP(n-3, map);
+    return map[n];
+}
+
+另一个机器人扫地：
+bool getPath(int x, int y, vector<Point> &path) {
+    Point p = new Point(x,y);
+    path.emplace_back(p);
+    if(x==0 && y==0) return true;
+    bool success = flase;
+    if(x>=1 && isFree(x-1,y)) {//move left;
+        success = getPath(x-1,y,path);
+    }
+    if(!success && y>=1 && isFree(x, y-1)) {//move up
+        success = getPath(x,y-1,path);
+    }
+    if(!success) path.add(p);
+    return success;
+}
+
