@@ -1,0 +1,44 @@
+
+我们都知道归并排序会调用一个辅助函数来合并最终结果。假设该函数声明如下：
+vector<int> merge(vector<int> &m, vector<int> &n);
+
+现在，有k个bucket，需要使用两两归并排序，请用递归的方式，实现最终的排序效果。
+因此请实现该函数：
+vector<int> mergeK(vector<vector<int>> &arr);
+
+
+一定要记住，递归的形式上要求自己调用自己，那么必须有开始和结束的位置。所以对于以上的形式，是有必要增加一个辅助函数的。
+
+vector<int> mergeK(vector<vector<int>> &arr) {
+    if(arr.empty()) return arr;
+    return mergeKRecursively(arr, 0, arr.size()-1);
+}
+
+vector<int> mergeKRecursively(vector<vector<int>> &arr, int start, int end){
+    if(start>=end) return arr[start];
+    int mid = start + (end-start)/2;
+    vector<int> left = mergeKRecursively(arr, start, mid);
+    vector<int> right = mergeKRecursively(arr, mid+1, end);
+    return merge(left, right);
+}
+
+最后，咱们再实现一下辅助函数merge
+
+vector<int> merge(vector<int> &m, vector<int> &n) {
+    if(m.empty()) return n;
+    if(n.empty()) return m;
+    
+    int i=0,j=0;
+    vector<int> ans;
+    while(i<m.size() && j<n.size()) {
+        if(m[i]<n[j]) ans.emplace_back(m[i++]);
+        else ans.emplace_back(n[j++]);
+    }
+    while (i<m.size()) ans.emplace_back(m[i++]);
+    while (j<n.size()) ans.emplace_back(n[j++]);
+    return ans;
+}
+
+这里面有几个地方需要注意，首先是空数组检测，其次是两个数组中一个遍历完之后，要考虑把另一个遍历归置进来。
+        
+    
